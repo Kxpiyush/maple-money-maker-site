@@ -1,12 +1,37 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { ArrowRight, TrendingUp, Shield, DollarSign, Star, Calendar, User } from 'lucide-react';
+import { ArrowRight, TrendingUp, Shield, DollarSign, Star, Calendar, User, ExternalLink } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
+  const [email, setEmail] = useState('');
+  const { toast } = useToast();
+
+  const handleEmailSignup = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) {
+      toast({
+        title: "Error",
+        description: "Please enter your email address",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    // Here you would integrate with your email marketing platform
+    console.log('Email signup:', email);
+    toast({
+      title: "Success!",
+      description: "Thanks for subscribing! Check your email for confirmation.",
+    });
+    setEmail('');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Hero Section */}
@@ -47,25 +72,28 @@ const Index = () => {
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
+                title: "7 Best Passive Income Ideas in Canada (2025 Edition)",
+                excerpt: "Want to grow your wealth while you sleep? Discover 7 beginner-friendly, proven passive income strategies that work in Canada.",
+                readTime: "15 min read",
+                category: "Passive Income",
+                date: "Dec 6, 2024",
+                link: "/blog/7-best-passive-income-ideas-canada-2025"
+              },
+              {
                 title: "TFSA vs RRSP: Which is Better for Passive Income?",
                 excerpt: "A comprehensive comparison of Canada's top tax-advantaged accounts for building wealth.",
                 readTime: "8 min read",
                 category: "Tax Strategy",
-                date: "Dec 5, 2024"
+                date: "Dec 5, 2024",
+                link: "#"
               },
               {
                 title: "Top 10 Canadian Dividend Stocks for 2024",
                 excerpt: "Discover reliable dividend-paying stocks that have consistently rewarded Canadian investors.",
                 readTime: "12 min read",
                 category: "Investing",
-                date: "Dec 3, 2024"
-              },
-              {
-                title: "REITs in Canada: Your Guide to Real Estate Income",
-                excerpt: "How to invest in Canadian real estate without buying property through REITs.",
-                readTime: "6 min read",
-                category: "Real Estate",
-                date: "Dec 1, 2024"
+                date: "Dec 3, 2024",
+                link: "#"
               }
             ].map((post, index) => (
               <Card key={index} className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border-0 shadow-lg">
@@ -92,10 +120,12 @@ const Index = () => {
                       <User className="h-4 w-4 mr-1" />
                       {post.readTime}
                     </span>
-                    <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700 p-0">
-                      Read More
-                      <ArrowRight className="ml-1 h-4 w-4" />
-                    </Button>
+                    <Link to={post.link}>
+                      <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700 p-0">
+                        Read More
+                        <ArrowRight className="ml-1 h-4 w-4" />
+                      </Button>
+                    </Link>
                   </div>
                 </CardContent>
               </Card>
@@ -156,7 +186,9 @@ const Index = () => {
                 features: ["$0 commission trades", "Auto-rebalancing", "Tax-loss harvesting"],
                 rating: 4.8,
                 cta: "Start Investing",
-                badge: "Most Popular"
+                badge: "Most Popular",
+                affiliateLink: "https://wealthsimple.com/invite/your-affiliate-code",
+                logo: "💰"
               },
               {
                 name: "Questrade",
@@ -164,7 +196,9 @@ const Index = () => {
                 features: ["Free ETF purchases", "Advanced tools", "Low margin rates"],
                 rating: 4.6,
                 cta: "Open Account",
-                badge: "Best for DIY"
+                badge: "Best for DIY",
+                affiliateLink: "https://questrade.com/promo/your-affiliate-code",
+                logo: "📈"
               },
               {
                 name: "Neo Financial",
@@ -172,7 +206,9 @@ const Index = () => {
                 features: ["High-interest savings", "No monthly fees", "Cashback rewards"],
                 rating: 4.7,
                 cta: "Get Started",
-                badge: "Best Savings"
+                badge: "Best Savings",
+                affiliateLink: "https://neofinancial.com/referral/your-affiliate-code",
+                logo: "🏦"
               }
             ].map((tool, index) => (
               <Card key={index} className="relative group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-3 border-0 shadow-lg overflow-hidden">
@@ -184,7 +220,10 @@ const Index = () => {
                   </div>
                 )}
                 <CardHeader className="pb-4">
-                  <CardTitle className="text-2xl text-slate-900 mb-2">{tool.name}</CardTitle>
+                  <div className="flex items-center mb-4">
+                    <span className="text-3xl mr-3">{tool.logo}</span>
+                    <CardTitle className="text-2xl text-slate-900">{tool.name}</CardTitle>
+                  </div>
                   <div className="flex items-center mb-3">
                     {[...Array(5)].map((_, i) => (
                       <Star
@@ -207,10 +246,12 @@ const Index = () => {
                       </li>
                     ))}
                   </ul>
-                  <Button className="w-full bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-lg font-semibold transition-all duration-300">
-                    {tool.cta}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
+                  <a href={tool.affiliateLink} target="_blank" rel="noopener noreferrer">
+                    <Button className="w-full bg-slate-900 hover:bg-slate-800 text-white py-3 rounded-lg font-semibold transition-all duration-300">
+                      {tool.cta}
+                      <ExternalLink className="ml-2 h-4 w-4" />
+                    </Button>
+                  </a>
                 </CardContent>
               </Card>
             ))}
@@ -228,16 +269,22 @@ const Index = () => {
               Join 15,000+ Canadians who get our best passive income strategies delivered to their inbox every week.
             </p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+          <form onSubmit={handleEmailSignup} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
             <Input
               type="email"
               placeholder="Enter your email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="flex-1 py-3 px-4 text-lg rounded-lg border-slate-600 bg-slate-800 text-white placeholder-slate-400 focus:border-green-400"
+              required
             />
-            <Button className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 text-lg rounded-lg font-semibold transition-all duration-300 transform hover:scale-105">
+            <Button 
+              type="submit"
+              className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 text-lg rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
+            >
               Subscribe
             </Button>
-          </div>
+          </form>
           <p className="text-sm text-slate-400 mt-4">
             No spam. Unsubscribe anytime. 🍁 Canadian content only.
           </p>
