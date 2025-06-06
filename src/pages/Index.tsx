@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -51,13 +50,17 @@ const Index = () => {
             tax-advantaged accounts, and dividend-paying stocks.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-              Start Your Journey
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button variant="outline" size="lg" className="px-8 py-4 text-lg rounded-xl border-2 border-slate-300 hover:border-blue-500 hover:text-blue-600 transition-all duration-300">
-              Read Latest Posts
-            </Button>
+            <Link to="/blog">
+              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                Start Your Journey
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
+            <Link to="/blog">
+              <Button variant="outline" size="lg" className="px-8 py-4 text-lg rounded-xl border-2 border-slate-300 hover:border-blue-500 hover:text-blue-600 transition-all duration-300">
+                Read Latest Posts
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -85,7 +88,7 @@ const Index = () => {
                 readTime: "8 min read",
                 category: "Tax Strategy",
                 date: "Dec 5, 2024",
-                link: "#"
+                link: "/blog/tfsa-vs-rrsp-passive-income"
               },
               {
                 title: "Top 10 Canadian Dividend Stocks for 2024",
@@ -93,13 +96,17 @@ const Index = () => {
                 readTime: "12 min read",
                 category: "Investing",
                 date: "Dec 3, 2024",
-                link: "#"
+                link: "/blog/top-canadian-dividend-stocks-2024"
               }
             ].map((post, index) => (
               <Card key={index} className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border-0 shadow-lg">
                 <CardHeader className="pb-4">
                   <div className="flex items-center justify-between mb-3">
-                    <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+                    <Badge variant="secondary" className={
+                      post.category === "Passive Income" ? "bg-green-100 text-green-800" :
+                      post.category === "Tax Strategy" ? "bg-blue-100 text-blue-800" :
+                      "bg-purple-100 text-purple-800"
+                    }>
                       {post.category}
                     </Badge>
                     <div className="flex items-center text-sm text-slate-500">
@@ -130,6 +137,16 @@ const Index = () => {
                 </CardContent>
               </Card>
             ))}
+          </div>
+          
+          {/* View All Posts Button */}
+          <div className="text-center mt-12">
+            <Link to="/blog">
+              <Button size="lg" variant="outline" className="px-8 py-3 text-lg rounded-xl border-2 border-blue-500 text-blue-600 hover:bg-blue-50 transition-all duration-300">
+                View All Posts
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
